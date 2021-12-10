@@ -1,9 +1,6 @@
 import { configureStore, combineReducers, ThunkAction, Action, AnyAction } from '@reduxjs/toolkit'
-import counterReducer from './slices/counterSlice'
 
-const appReducer = combineReducers({
-  counter: counterReducer,
-})
+const appReducer = combineReducers({})
 
 const rootReducer = (state: AppState | undefined, action: AnyAction) => {
   if (action.type === 'USER_LOGOUT') {
