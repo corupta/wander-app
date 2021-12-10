@@ -1,0 +1,7 @@
+# node.js
+#
+node_modules/
+
+# Expo
+.expo/*
+web-build/
