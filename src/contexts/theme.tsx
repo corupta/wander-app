@@ -5,27 +5,29 @@ import { DEFAULT_THEME, Theme, themeConstants } from '../constants/Theme'
 import { changeTheme, selectTheme } from '../redux/slices/preferencesSlice'
 
 type ThemeContext = {
-  activeTheme: Theme
+  selectedTheme?: Theme // This can be null to use system default
+  activeTheme: Theme // Loaded theme based on user preference or system default or fallback
   changeTheme: (theme: Theme) => void
 } & typeof themeConstants[Theme.Dark]
 
 const Context = createContext<ThemeContext | null>(null)
 
 export const ThemeProvider: React.FC = ({ children }) => {
-  const activeTheme = useSelector(selectTheme)
+  const selectedTheme = useSelector(selectTheme)
   const dispatch = useDispatch()
   const systemColorScheme = useColorScheme()
 
   const themeValues = useMemo(() => {
-    const loadedTheme = ((activeTheme === null ? systemColorScheme : activeTheme) ?? DEFAULT_THEME) as Theme
+    const activeTheme = ((selectedTheme === null ? systemColorScheme : selectedTheme) ?? DEFAULT_THEME) as Theme
 
     const value: ThemeContext = {
       activeTheme,
+      selectedTheme,
       changeTheme: (theme: Theme) => dispatch(changeTheme(theme)),
-      ...themeConstants[loadedTheme],
+      ...themeConstants[activeTheme],
     }
     return value
-  }, [activeTheme, systemColorScheme])
+  }, [selectedTheme, systemColorScheme])
 
   return <Context.Provider value={themeValues}>{children}</Context.Provider>
 }
