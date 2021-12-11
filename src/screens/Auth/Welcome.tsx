@@ -9,8 +9,9 @@ import { useDispatch } from 'react-redux'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { changeTheme } from '../../redux/slices/preferencesSlice'
 import { Theme } from '../../constants/Theme'
-import { HPText, HPButton } from '../../theme/components'
+import { HPText, HPButton, HPDivider } from '../../theme/components'
 import { SPACING } from '../../theme/spacing'
+import HPView from '../../theme/components/HPView'
 
 type WelcomeScreenRouteProp = RouteProp<AuthParamList, Routes.Welcome>
 
@@ -28,15 +29,16 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <HPView variant="background">
       <HPText variant="header" color="text" margin={{ marginVertical: SPACING.LARGE }} alignSelf="center">
         Welcome Screen
       </HPText>
+
       <HPButton large variant="outlined" size="fullWidth" title="LOGIN" onPress={() => console.log('HARRY POTTER')} />
       <HPText variant="subheader" color="text" margin={{ marginVertical: SPACING.LARGE }}>
         Harry Potter
       </HPText>
-
+      <HPDivider />
       {[Theme.Light, Theme.Dark, null].map((theme) => (
         <TouchableOpacity
           key={theme}
@@ -48,7 +50,7 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       ))}
-    </View>
+    </HPView>
   )
 }
 
