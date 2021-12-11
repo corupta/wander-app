@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native'
 import { DeviceMotion } from 'expo-sensors';
+import axios from 'axios';
 import flat from 'flat';
 import PQueue from 'p-queue';
 
@@ -31,6 +32,10 @@ const calculateNextState = (prevState = {}, interval, data) => {
     Object.entries(data).forEach((key, raw) => {
         if (typeof raw === 'object') {
             nextState[key] = calculateNextState((prevState || {})[key], interval, raw);
+            if (key.startsWith('acceleration')) {
+                const keyAngle = `accelarationAngle${key.substr(12)}`;
+                nextState[keyAngle] = calculateNextState((prevState || {})[keyAngle], interval, accelarationToDegrees(raw));
+            }
             return;
         }
         ['raw','int1','int2','der1','der2'].forEach((k) => {
@@ -58,7 +63,7 @@ const dweetState = (state) => {
     return axios.post('https://dweet.io/dweet/for/educated-giants/', flatState);
 }
 
-class Sensors3 extends React.PureComponent {
+class Sensors extends React.PureComponent {
     state = {
         avail: undefined
     }
