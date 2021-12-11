@@ -11,6 +11,7 @@ import { changeTheme } from '../../redux/slices/preferencesSlice'
 import { Theme } from '../../constants/Theme'
 import { HPText, HPButton } from '../../theme/components'
 import { SPACING } from '../../theme/spacing'
+import HPView from '../../theme/components/HPView'
 
 type WelcomeScreenRouteProp = RouteProp<AuthParamList, Routes.Welcome>
 
@@ -28,7 +29,7 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <HPView variant="background">
       <HPText variant="header" color="text" margin={{ marginVertical: SPACING.LARGE }} alignSelf="center">
         Welcome Screen
       </HPText>
@@ -48,7 +49,7 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       ))}
-    </View>
+    </HPView>
   )
 }
 
