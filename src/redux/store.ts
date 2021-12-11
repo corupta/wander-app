@@ -1,6 +1,9 @@
 import { configureStore, combineReducers, ThunkAction, Action, AnyAction } from '@reduxjs/toolkit'
+import preferencesReducer from './slices/preferencesSlice'
 
-const appReducer = combineReducers({})
+const appReducer = combineReducers({
+  preferences: preferencesReducer,
+})
 
 const rootReducer = (state: AppState | undefined, action: AnyAction) => {
   if (action.type === 'USER_LOGOUT') {
