@@ -9,7 +9,7 @@ const Stack = createStackNavigator<RootParamList>()
 
 function RootNavigator(): JSX.Element {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={Routes.Home} component={HomeNavigator} />
       <Stack.Screen name={Routes.NotFound} component={NotFound} options={{ title: 'Ooops!' }} />
     </Stack.Navigator>
