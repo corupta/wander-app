@@ -22,15 +22,23 @@ type StackScreenProps = {
 }
 
 const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
-  const { colors, activeTheme } = useTheme()
+  const { colors, selectedTheme } = useTheme()
   const dispatch = useDispatch()
-  const handleThemeChange = () => dispatch(changeTheme(activeTheme === Theme.Dark ? Theme.Light : Theme.Dark))
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={{ color: colors.text }}>Welcome Screen</Text>
-      <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={handleThemeChange}>
-        <Text style={{ color: colors.text }}>Change Theme</Text>
-      </TouchableOpacity>
+      {[Theme.Light, Theme.Dark, null].map((theme) => (
+        <TouchableOpacity
+          key={theme}
+          style={[styles.button, { backgroundColor: colors.primary }]}
+          onPress={() => dispatch(changeTheme(theme))}>
+          <Text style={{ color: colors.text }}>
+            {theme ?? 'system default'}
+            {selectedTheme === theme && ' active'}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   )
 }
