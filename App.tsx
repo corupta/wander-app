@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { ThemeProvider } from './src/contexts/theme'
 
 import useCachedResources from './src/hooks/useCachedResources'
 import { Provider } from 'react-redux'
-import { store } from './src/redux/store'
+import { store, persistor } from './src/redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
 import Navigation from './src/navigation'
 
 export default function App() {
@@ -15,11 +17,11 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        <SafeAreaProvider>
-          {/* <Navigation colorScheme={colorScheme} /> */}
-          <Navigation />
-          <StatusBar />
-        </SafeAreaProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider>
+            <Navigation />
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     )
   }
