@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { ThemeProvider } from './src/contexts/theme'
 
 import useCachedResources from './src/hooks/useCachedResources'
 import { Provider } from 'react-redux'
@@ -15,11 +16,9 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        <SafeAreaProvider>
-          {/* <Navigation colorScheme={colorScheme} /> */}
+        <ThemeProvider>
           <Navigation />
-          <StatusBar />
-        </SafeAreaProvider>
+        </ThemeProvider>
       </Provider>
     )
   }

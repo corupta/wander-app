@@ -15,6 +15,6 @@ export const preferencesSlice = createSlice({
 })
 
 export const { changeTheme } = preferencesSlice.actions
-export const selecTheme = (state: RootState): Theme => state.preferences.theme
+export const selectTheme = (state: RootState): Theme => state.preferences.theme
 
 export default preferencesSlice.reducer
