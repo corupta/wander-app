@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, Alert } from 'react-native'
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Routes } from '../../constants'
@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { changeTheme } from '../../redux/slices/preferencesSlice'
 import { Theme } from '../../constants/Theme'
+import { HPText, HPButton } from '../../theme/components'
+import { SPACING } from '../../theme/spacing'
 
 type WelcomeScreenRouteProp = RouteProp<AuthParamList, Routes.Welcome>
 
@@ -27,7 +29,14 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={{ color: colors.text }}>Welcome Screen</Text>
+      <HPText variant="header" color="text" margin={{ marginVertical: SPACING.LARGE }} alignSelf="center">
+        Welcome Screen
+      </HPText>
+      <HPButton large variant="outlined" size="fullWidth" title="LOGIN" onPress={() => console.log('HARRY POTTER')} />
+      <HPText variant="subheader" color="text" margin={{ marginVertical: SPACING.LARGE }}>
+        Harry Potter
+      </HPText>
+
       {[Theme.Light, Theme.Dark, null].map((theme) => (
         <TouchableOpacity
           key={theme}
@@ -46,8 +55,7 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: SPACING.MASSIVE,
   },
   button: {
     paddingHorizontal: 12,
