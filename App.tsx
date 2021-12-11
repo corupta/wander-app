@@ -5,7 +5,8 @@ import { ThemeProvider } from './src/contexts/theme'
 
 import useCachedResources from './src/hooks/useCachedResources'
 import { Provider } from 'react-redux'
-import { store } from './src/redux/store'
+import { store, persistor } from './src/redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
 import Navigation from './src/navigation'
 
 export default function App() {
@@ -16,9 +17,11 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        <ThemeProvider>
-          <Navigation />
-        </ThemeProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider>
+            <Navigation />
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     )
   }

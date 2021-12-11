@@ -1,4 +1,7 @@
-import { configureStore, combineReducers, ThunkAction, Action, AnyAction } from '@reduxjs/toolkit'
+import { configureStore, combineReducers, ThunkAction, Action, AnyAction, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import preferencesReducer from './slices/preferencesSlice'
 
 const appReducer = combineReducers({
@@ -12,9 +15,24 @@ const rootReducer = (state: AppState | undefined, action: AnyAction) => {
   return appReducer(state, action)
 }
 
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['preferences'],
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 })
+
+export const persistor = persistStore(store)
 
 export type AppDispatch = typeof store.dispatch
 export type AppState = ReturnType<typeof appReducer>
