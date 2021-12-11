@@ -1,15 +1,17 @@
 export enum Theme {
-  Auto,
   Dark = 'dark',
   Light = 'light',
 }
 
-export const DEFAULT_THEME = Theme.Light
-
 const tintColorLight = '#2f95dc'
 const tintColorDark = '#fff'
 
-export const themeConstants = {
+// If system default is undefined and user hasn't saved any preferences yet
+export const DEFAULT_THEME = Theme.Light
+
+type ThemeMap = Record<Theme, { colors: { [key: string]: string } }>
+
+export const themeConstants: ThemeMap = {
   [Theme.Light]: {
     colors: {
       text: '#000',
@@ -20,10 +22,12 @@ export const themeConstants = {
     },
   },
   [Theme.Dark]: {
-    text: '#fff',
-    background: '#000',
-    tint: tintColorDark,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorDark,
+    colors: {
+      text: '#fff',
+      background: '#000',
+      tint: tintColorDark,
+      tabIconDefault: '#ccc',
+      tabIconSelected: tintColorDark,
+    },
   },
 }

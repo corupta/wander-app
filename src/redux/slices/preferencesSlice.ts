@@ -5,7 +5,7 @@ import { RootState } from '../store'
 export const preferencesSlice = createSlice({
   name: 'preferences',
   initialState: {
-    theme: Theme.Auto,
+    theme: null,
   },
   reducers: {
     changeTheme: (state, action) => {
