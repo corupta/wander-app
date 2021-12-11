@@ -10,13 +10,14 @@ export const palette = {
   error: 'rgb(240, 55, 56)',
   blackOverlay: 'rgba(0, 0, 0, 0.2)',
   whiteOverlay: 'rgba(255, 255, 255, 0.2)',
+  lighteGray: 'rgb(200, 200, 200)',
+  darkeGray: 'rgb(100, 100, 100)',
 } as const
 
 // If system default is undefined and user hasn't saved any preferences yet
 export const DEFAULT_THEME = Theme.Light
 
-export type ThemeColors = 'primary' | 'background' | 'text' | 'error' | 'overlay' | 'white'
-type ThemeMap = Record<Theme, { colors: { [key: string]: string } }>
+export type ThemeColors = 'primary' | 'background' | 'text' | 'error' | 'overlay' | 'white' | 'divider'
 
 export const FONT_REGULAR = 'SpaceMonoRegular'
 export const FONT_BOLD = 'SpaceMonoBold'
@@ -31,6 +32,7 @@ export const themeConstants = {
       error: palette.error,
       overlay: palette.blackOverlay,
       white: palette.white,
+      divider: palette.lighteGray,
     },
   },
   [Theme.Dark]: {
@@ -41,6 +43,7 @@ export const themeConstants = {
       error: palette.error,
       overlay: palette.whiteOverlay,
       white: palette.white,
+      divider: palette.darkeGray,
     },
   },
 }
