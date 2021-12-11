@@ -13,11 +13,8 @@ interface IHPExileBGStyle extends ViewStyle {
 }
 
 interface IHPVariantStyle {
-  card?: IHPViewStyle
-  screen?: IHPViewStyle
   background?: IHPViewStyle
   emptyScreen?: IHPViewStyle
-  input?: IHPViewStyle
 }
 
 interface IHPViewStyleProps extends ViewProps {
