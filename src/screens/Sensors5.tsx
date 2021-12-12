@@ -8,8 +8,8 @@ const UPDATE_INTERVAL = 10;
 
 const SMOOTH_DATA_DEFAULT = true;
 const DECAY_DATA_DEFAULT = true;
-const SMOOTH_RATE = 0.2; // 1 means full prev, 0 means full new
-const DECAY_RATE_RAW = 0.5 ;
+const SMOOTH_RATE = 0.1; // 1 means full prev, 0 means full new
+const DECAY_RATE_RAW = 0.9 ;
 const SOCKET_URL = "http://192.168.0.21:8080";
 
 const DECAY_RATE = 1-Math.pow(1-DECAY_RATE_RAW, UPDATE_INTERVAL/1000);
@@ -70,7 +70,7 @@ const calculateNextState = (prevState = {}, interval, data, smoothData = SMOOTH_
         if (smoothData) int1 = prevValue.int1 * SMOOTH_RATE + int1 * (1-SMOOTH_RATE);
         if(isAngle)int1 = ((int1+3)%2)-1;
         let int2 = prevValue.int2 + int1 * interval;
-        if (decayData) int2 = int2 * (1 - DECAY_RATE);
+        // if (decayData) int2 = int2 * (1 - DECAY_RATE);
         if (smoothData) int2 = prevValue.int2 * SMOOTH_RATE + int2 * (1-SMOOTH_RATE);
         if (isAngle)int2 = ((int2+3)%2)-1;
         // let der1 = (raw - prevValue.raw) / interval;
@@ -149,6 +149,10 @@ class Sensors extends React.PureComponent {
     toggleDecay = () => {
         this.setState(p => ({ decayData: !p.decayData}))
     }
+    resetData = () => {
+        this.dataState = {};
+        this.socket.emit('reset');
+    }
     render() {
         const { avail, smoothData, decayData } = this.state;
         let mid = null;
@@ -169,6 +173,10 @@ class Sensors extends React.PureComponent {
                 <Button 
                     title={decayData ? 'decaying data' : 'NOT decaying data'}
                     onPress={this.toggleDecay} 
+                />
+                <Button 
+                    title={'reset data'}
+                    onPress={this.resetData} 
                 />
             </View>
         )
