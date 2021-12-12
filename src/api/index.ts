@@ -17,5 +17,6 @@ axios.interceptors.request.use(
 )
 
 const getProfile = () => axios.get(`${baseURL}users/profile`)
+const getWands = () => axios.get(`${baseURL}wands`)
 
-export { getProfile }
+export { getProfile, getWands }
