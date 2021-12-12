@@ -1,5 +1,7 @@
 # wander-app
 
+* Shake your phone as a want to cast Harry Potter spells and win wands.
+
 ## Wander Repositories
 * [@corupta/wander-app](https://github.com/corupta/wander-app)
 * [@corupta/wander-api](https://github.com/corupta/wander-api)
