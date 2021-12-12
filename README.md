@@ -3,7 +3,9 @@
 * Shake your phone as a wand to draw and cast Harry Potter spells and win wands.
 
 ## VIDEO
-[PLAY VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/RPReplay_Final1639340791.MP4)
+* [PLAY GAME SCREEN VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/RPReplay_Final1639340791.MP4)
+* [TEST DASHBOARD DRAWING VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/dash-pointer.mp4)
+* [PLAY GAME HAND MOVEMENTS VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/gameplay.mp4)
 
 * # How it Works
 
@@ -77,3 +79,10 @@ Another version (AWS one) including this patch is deployed on [https://api2.wand
 ![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/6.png)
 ![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/7.png)
 ![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/8.png)
+
+
+## Test Dashboard Screenshots
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/d1.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/d2.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/d3.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/d4.png)
