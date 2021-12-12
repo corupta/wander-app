@@ -21,6 +21,9 @@ Another version (AWS one) including this patch is deployed on [https://api2.wand
 ## Swagger Docs
 [https://api.wanderapp.cf/docs](https://api.wanderapp.cf/docs)
 
+## VIDEO
+[VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/RPReplay_Final1639340791.MP4)
+
 ## YOU DON'T NEED TO START BACKEND ON YOUR LOCAL MACHINE. You just need to run the application on your phone with expo. 
 
 ## App Start
