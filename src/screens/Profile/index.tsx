@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   logoutButtonRow: {
     position: 'absolute',
-    bottom: SPACING.SMALL,
+    bottom: SPACING.MEDIUM,
     left: SPACING.SMALL,
     right: SPACING.SMALL,
   },
