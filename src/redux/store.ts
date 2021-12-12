@@ -21,6 +21,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['preferences', 'auth'],
+  // whitelist: ['preferences'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
