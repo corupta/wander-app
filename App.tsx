@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 import { store, persistor } from './src/redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import Navigation from './src/navigation'
-import Sensors from './src/screens/Sensors3'
+import Sensors from './src/screens/Sensors4'
 
 export default function App() {
   const isLoadingComplete = useCachedResources()

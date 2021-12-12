@@ -2,15 +2,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { DeviceMotion, Gyroscope, Accelerometer, Magnetometer } from 'expo-sensors';
-import axios from 'axios';
-import flat from 'flat';
-import PQueue from 'p-queue';
+import { io } from "socket.io-client";
 
-UPDATE_INTERVAL = 1100;
+const UPDATE_INTERVAL = 10;
 
 const SMOOTH_DATA_DEFAULT = true;
+const DECAY_DATA_DEFAULT = true;
 const SMOOTH_RATE = 0.8; // 1 means full prev, 0 means full new
-const CONCURRENCY = 1; //Math.ceil(2000 / UPDATE_INTERVAL) + 5;
+const DECAY_RATE_RAW = 0.1 ;
+const SOCKET_URL = "http://192.168.0.21:8080";
+
+const DECAY_RATE = 1-Math.pow(1-DECAY_RATE_RAW, UPDATE_INTERVAL/1000);
 
 const styles = StyleSheet.create({
     container: {
@@ -29,34 +31,29 @@ const styles = StyleSheet.create({
 
 const accelarationToDegrees = (accel) => {
     const { x, y, z } = accel;
-    const theta = Math.atan2(-z, x);
+    let theta = Math.atan2(-z, x);
     const cosphi = x / Math.cos(theta);
-    const phi = Math.atan2(y, cosphi);
+    let phi = Math.atan2(y, cosphi);
+    theta = theta / Math.PI;
+    phi = phi / Math.PI;
     return { phi, theta };
 }
 
-const THINGS = {
-    DEVICE_MOTION: 'wander-device-motion', 
-    ACCELERATION: 'wander-acceleration-gyroscope',
-    GYROSCOPE: 'wander-acceleration-gyroscope',
-    MAGNETOMETER: 'wander-acceleration-gyroscope'
-};
-
-const calculateNextState = (prevState = {}, interval, data, smoothData = SMOOTH_DATA_DEFAULT) => {
+const calculateNextState = (prevState = {}, interval, data, smoothData = SMOOTH_DATA_DEFAULT, decayData = DECAY_DATA_DEFAULT, isAngle=false) => {
     // if (typeof smoothData === 'function') smoothData = smoothData()
     const nextState = {...prevState};
     Object.entries(data).forEach(([key, raw]) => {
         if (typeof raw === 'object') {
-            nextState[key] = calculateNextState(prevState[key], interval, raw);
-            if (key.startsWith('acceleration')) {
-                const keyAngle = `accelarationAngle${key.substr(12)}`;
-                nextState[keyAngle] = calculateNextState(prevState[keyAngle], interval, accelarationToDegrees(raw));
-            }
+            nextState[key] = calculateNextState(prevState[key], interval, raw, smoothData, decayData);
+            // if (key.startsWith('acceleration')) {
+            //     const keyAngle = `accelarationAngle${key.substr(12)}`;
+            //     nextState[keyAngle] = calculateNextState(prevState[keyAngle], interval, accelarationToDegrees(raw), smoothData, decayData, true);
+            // }
             return;
         }
         let prevValue = prevState[key] || {};
         // if(key==='z')console.log('prevState', JSON.stringify(prevValue));
-        ['raw','int1','int2','der1','der2'].forEach((k) => {
+        ['raw','int1','int2'/*,'der1','der2'*/].forEach((k) => {
             // if(key==='z')console.log('prevValue', JSON.stringify(prevValue));
             if (typeof prevValue[k] === 'undefined') {
                 prevValue[k] = 0;
@@ -66,18 +63,26 @@ const calculateNextState = (prevState = {}, interval, data, smoothData = SMOOTH_
         // int1 -> integral1, int2 -> integral2
         // der1 -> derivative1, der2 -> derivative2
         if (smoothData) raw = prevValue.raw * SMOOTH_RATE + raw * (1-SMOOTH_RATE);
+        if (decayData) raw = raw * (1 - DECAY_RATE);
         let int1 = prevValue.int1 + raw * interval;
         // if(key==='z')console.log('key raw interval raw * interval p.int1, int1', key, ...[raw, interval, raw*interval, prevValue.int1, int1].map(a => a.toFixed(3)));
+        if (decayData) int1 = int1 * (1 - DECAY_RATE);
         if (smoothData) int1 = prevValue.int1 * SMOOTH_RATE + int1 * (1-SMOOTH_RATE);
+        if(isAngle)int1 = ((int1+3)%2)-1;
         let int2 = prevValue.int2 + int1 * interval;
+        if (decayData) int2 = int2 * (1 - DECAY_RATE);
         if (smoothData) int2 = prevValue.int2 * SMOOTH_RATE + int2 * (1-SMOOTH_RATE);
-        let der1 = (raw - prevValue.raw) / interval;
-        if (smoothData) der1 = prevValue.der1 * SMOOTH_RATE + der1 * (1-SMOOTH_RATE);
-        // can smooth der with der1 = der1 * a + prevValue.der1 * (1-a)
-        let der2 = (der1 - prevValue.der1) / interval;
-        if (smoothData) der2 = prevValue.der2 * SMOOTH_RATE + der2 * (1-SMOOTH_RATE);
+        if (isAngle)int2 = ((int2+3)%2)-1;
+        // let der1 = (raw - prevValue.raw) / interval;
+        // if (decayData) der1 = der1 * (1 - DECAY_RATE);
+        // if (smoothData) der1 = prevValue.der1 * SMOOTH_RATE + der1 * (1-SMOOTH_RATE);
+        // // can smooth der with der1 = der1 * a + prevValue.der1 * (1-a)
+        // let der2 = (der1 - prevValue.der1) / interval;
+        // if (decayData) der2 = der2 * (1 - DECAY_RATE);
+        // if (smoothData) der2 = prevValue.der2 * SMOOTH_RATE + der2 * (1-SMOOTH_RATE);
         nextState[key] =  {
-            der2, der1, raw, int1, int2
+            // der2, der1, 
+            raw, int1, int2
         };
     })
     return nextState;
@@ -87,40 +92,21 @@ const precisionFix = (n) => {
     return Math.round(n*1000) / 1000;
 }
 
-const dweetState = (thing, state) => {
-    let flatState = flat(state, { delimiter: '_'});
-    flatState = Object.entries(flatState).reduce((acc, [k,v]) => ({
-        ...acc,
-        [k]: precisionFix(v)
-    }), {});
-    // console.log('post', thing);
-    return async () => {
-        try {
-            // console.log('post start', thing);
-            const res = await axios.post(`https://dweet.io/dweet/quietly/for/${thing}`, flatState);
-            // console.log('post complete', thing, res.status);
-        } catch (e) {
-            console.log('post fail', e);
-        }
-    }
-}
-
 class Sensors extends React.PureComponent {
     state = {
         avail: undefined,
-        smoothData: SMOOTH_DATA_DEFAULT
+        smoothData: SMOOTH_DATA_DEFAULT,
+        decayData: DECAY_DATA_DEFAULT
     }
     componentDidMount() {
-        this.dmq = new PQueue({ concurrency: CONCURRENCY });
-        this.aq = new PQueue({ concurrency: CONCURRENCY });
-        this.gq = new PQueue({ concurrency: CONCURRENCY });
-        this.mq = new PQueue({ concurrency: CONCURRENCY });
+        console.log('DECAY_RATE', DECAY_RATE);
+        this.socket = io(SOCKET_URL);
         DeviceMotion.isAvailableAsync().then((avail) => {
             if (avail) {
-                DeviceMotion.addListener(this.deviceMotionListener(this.dmq, THINGS.DEVICE_MOTION));
-                Gyroscope.addListener(this.deviceMotionListener(this.gq, THINGS.GYROSCOPE, 'accelerationGyro'));
-                Accelerometer.addListener(this.deviceMotionListener(this.aq, THINGS.ACCELERATION, 'accelerationSensor'));
-                Magnetometer.addListener(this.deviceMotionListener(this.mq, THINGS.MAGNETOMETER, 'accelerationMagnet'));
+                DeviceMotion.addListener(this.deviceMotionListener());
+                Gyroscope.addListener(this.deviceMotionListener('gyroAccel'));
+                Accelerometer.addListener(this.deviceMotionListener('sensorAccel'));
+                Magnetometer.addListener(this.deviceMotionListener('magnet'));
             }
             this.setState({ avail })
         })
@@ -130,38 +116,41 @@ class Sensors extends React.PureComponent {
         Accelerometer.setUpdateInterval(UPDATE_INTERVAL);
         Magnetometer.setUpdateInterval(UPDATE_INTERVAL);
     }
-    deviceMotionListener = (q, thing,prepend) => {
+    deviceMotionListener = (prepend) => {
         let lastCall;
         return (rawData) => {
             let { interval, orientation, ...data } = rawData;
             if (prepend) {
                 data = { [prepend]: data };
             }
-            if (!interval) {
-                if (lastCall) {
-                    interval = Date.now() - lastCall;
-                    lastCall += interval;
-                } else {
-                    lastCall = Date.now();
-                    interval = UPDATE_INTERVAL;
-                }
-            }
+            interval = UPDATE_INTERVAL;
+            lastCall = Date.now();
+            // if (!interval) {
+            //     if (lastCall) {
+            //         interval = Date.now() - lastCall;
+            //         lastCall += interval;
+            //     } else {
+            //         lastCall = Date.now();
+            //         interval = UPDATE_INTERVAL;
+            //     }
+            // } else {
+            //     lastCall = Date.now();
+            // }
             interval /= 1000; // ms to s
             // if (prepend === 'accelerationMagnet') console.log(this.dataState[prepend]);
-            this.dataState = calculateNextState(this.dataState, interval, data, this.state.smoothData);
-            if (!prepend) {
-                setTimeout(() => {
-                    q.add(dweetState(thing, this.dataState));
-                }, 100);
-            }
-            console.log(prepend || 'device-motion', interval * 1000, 'ms');
+            this.dataState[prepend] = calculateNextState(this.dataState[prepend], interval, data, this.state.smoothData, this.state.decayData);
+            this.socket.emit('data', this.dataState[prepend], lastCall)
+            // console.log(prepend || 'device-motion', interval * 1000, 'ms');
         }
     }
     toggleSmooth = () => {
         this.setState(p => ({ smoothData: !p.smoothData}))
     }
+    toggleDecay = () => {
+        this.setState(p => ({ decayData: !p.decayData}))
+    }
     render() {
-        const { avail, smoothData } = this.state;
+        const { avail, smoothData, decayData } = this.state;
         let mid = null;
         if (avail === true) {
             mid = <Text style={styles.sucText}>DeviceMotion is available.</Text>
@@ -176,6 +165,10 @@ class Sensors extends React.PureComponent {
                 <Button 
                     title={smoothData ? 'smoothing data' : 'NOT smoothing data'}
                     onPress={this.toggleSmooth} 
+                />
+                <Button 
+                    title={decayData ? 'decaying data' : 'NOT decaying data'}
+                    onPress={this.toggleDecay} 
                 />
             </View>
         )
