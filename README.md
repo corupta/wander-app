@@ -18,3 +18,13 @@
 * yarn
 * STEP 4
 * yarn start
+
+
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/1.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/2.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/3.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/4.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/5.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/6.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/7.png)
+![image](https://wanderapp-assets.s3.amazonaws.com/gorseller/8.png)
