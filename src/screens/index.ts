@@ -1,0 +1,8 @@
+export { default as Welcome } from './Auth/Welcome'
+export { default as NotFound } from './NotFound'
+export { default as LeaderBoard } from './LeaderBoard'
+export { default as Profile } from './Profile'
+export { default as Wand } from './Wand'
+export { default as StartMagic } from './StartMagic'
+export { default as MagicList } from './MagicList'
+export { default as InformationModal } from './informationModal'
