@@ -1,6 +1,10 @@
 # wander-app
 
 * Shake your phone as a wand to draw and cast Harry Potter spells and win wands.
+
+## VIDEO
+[PLAY VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/RPReplay_Final1639340791.MP4)
+
 * # How it Works
 
 Our aim is to provide an experience where you master Harry Potter spells through practicing to draw them with your mobile phones. However, we did not take a simple approach, and instead made it possible through moving/rotating your phones, rather than drawing by hand.
@@ -51,8 +55,6 @@ Another version (AWS one) including this patch is deployed on [https://api2.wand
 ## Swagger Docs
 [https://api.wanderapp.cf/docs](https://api.wanderapp.cf/docs)
 
-## VIDEO
-[VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/RPReplay_Final1639340791.MP4)
 
 ## YOU DON'T NEED TO START BACKEND ON YOUR LOCAL MACHINE. You just need to run the application on your phone with expo. 
 
