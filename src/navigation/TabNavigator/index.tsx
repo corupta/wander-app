@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { LeaderBoard, Profile } from '../../screens/index'
+import { LeaderBoard, Profile, Wand } from '../../screens/index'
 import { Routes } from '../../constants'
 import { FontAwesome } from '@expo/vector-icons'
 import useTheme from '../../contexts/theme'
@@ -31,6 +31,14 @@ export function TabNavigator() {
           title: 'Leader Board',
           tabBarIcon: ({ focused }) => <TabBarIcon name="trophy" color={focused ? colors.primary : colors.overlay} />,
         })}
+      />
+      <Tab.Screen
+        name={Routes.ListOfWands}
+        component={Wand}
+        options={{
+          title: 'List Of Wands',
+          tabBarIcon: ({ focused }) => <TabBarIcon name="magic" color={focused ? colors.primary : colors.overlay} />,
+        }}
       />
       <Tab.Screen
         name={Routes.Profile}

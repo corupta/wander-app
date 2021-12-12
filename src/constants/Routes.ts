@@ -13,6 +13,7 @@ export enum Routes {
   //TABNAVIGATOR//
   LeaderBoard = 'LeaderBoard',
   Profile = 'Profile',
+  ListOfWands = 'ListOfWands',
 }
 
 export default Routes
