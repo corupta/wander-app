@@ -1,6 +1,6 @@
 # wander-app
 
-* Shake your phone as a want to cast Harry Potter spells and win wands.
+* Shake your phone as a wand to draw and cast Harry Potter spells and win wands.
 
 ## Wander Repositories
 * [@corupta/wander-app](https://github.com/corupta/wander-app)
