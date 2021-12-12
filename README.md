@@ -23,6 +23,15 @@ It required a huge R&D effort for us; however, we have managed to accomplish the
 * We found a very interesting way to fix that issue. Think of the nuclear physics where particles have half-decay time. We applied a similar idea such that we always multiplied values with a decay ratio. If we keep this value high enough, everything worked super smoothly in an unexpected way. But that was not the only parameter we tried, and we weren't sure if this was possible at the beginning of the hackathon.
 * Doing above, we get a list of points in 2d, which can be used to create successful 2d drawings
 
+### Image Similarity
+* We then compared two images (original spell shape image) by taking some kind of hashes via `Jimp` and obtained a similarity metric.
+
+### The Game
+* Login with GitHub OAuth
+* When you successfully cast your next spell, you level up
+* As you level up, you can equip new wands.
+* See leaderboard and other players.
+
 ## Bugs
 Unfortunately, with the final feature we develop our server limit of 50MB for source code was finished (our source code built became 51MB)
 So, we tried to deploy it to aws server in the last minute and it took some time. As a result we couldn't test this feature. 
