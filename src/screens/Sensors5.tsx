@@ -9,7 +9,7 @@ const UPDATE_INTERVAL = 10;
 const SMOOTH_DATA_DEFAULT = true;
 const DECAY_DATA_DEFAULT = true;
 const SMOOTH_RATE = 0.1; // 1 means full prev, 0 means full new
-const DECAY_RATE_RAW = 0.9 ;
+const DECAY_RATE_RAW = 0.8 ;
 const SOCKET_URL = "http://192.168.0.21:8080";
 
 const DECAY_RATE = 1-Math.pow(1-DECAY_RATE_RAW, UPDATE_INTERVAL/1000);
