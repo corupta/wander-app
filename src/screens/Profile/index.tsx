@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, userInformaiton } from '../../redux/slices/authSlice'
+import { userInformaiton } from '../../redux/slices/authSlice'
 import { HPButton, HPDivider, HPText, HPView } from '../../theme/components'
 import { AvatarSize, BorderRadius } from '../../theme/layout'
 import { SPACING } from '../../theme/spacing'
