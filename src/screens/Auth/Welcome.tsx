@@ -3,12 +3,14 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Routes } from '../../constants'
 import { AuthParamList, HomeParamList } from '../../types/Navigation'
-import { HPText, HPButton, HPDivider } from '../../theme/components'
+import { HPText, HPButton } from '../../theme/components'
 import { SPACING } from '../../theme/spacing'
 import HPView from '../../theme/components/HPView'
 import SignInModal from '../../components/signInModal'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/authSlice'
+import { Entypo } from '@expo/vector-icons'
+import { StyleSheet, View } from 'react-native'
 
 type WelcomeScreenRouteProp = RouteProp<AuthParamList, Routes.Welcome>
 
@@ -31,10 +33,13 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <HPView variant="background">
+    <HPView variant="background" style={{ justifyContent: 'space-between' }}>
       <HPText variant="header" color="text" margin={{ marginVertical: SPACING.LARGE }} alignSelf="center">
-        Welcome Screen
+        Welcome Magician ~
       </HPText>
+      <View style={styles.center}>
+        <Entypo name="flash" size={100} color="#213232" />
+      </View>
       <HPButton
         large
         variant="outlined"
@@ -42,9 +47,8 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
         title="LOGIN WITH GITHUB"
         onPress={() => setSignInModal(true)}
       />
-      <HPDivider />
-      <HPText variant="subheader" color="text" margin={{ marginVertical: SPACING.LARGE }}>
-        Harry Potter
+      <HPText variant="miscHelper" color="text" alignSelf="flex-end" margin={{ marginVertical: SPACING.LARGE }}>
+        there's magic inside
       </HPText>
 
       {signInModal && (
@@ -58,5 +62,9 @@ const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
     </HPView>
   )
 }
+
+const styles = StyleSheet.create({
+  center: { alignItems: 'center' },
+})
 
 export default WelcomeScreen
