@@ -22,5 +22,6 @@ const getWands = () => axios.get(`${baseURL}wands`)
 const getAllUsers = () => axios.get(`${baseURL}users`)
 const selectWand = (req: WandId) => axios.put(`${baseURL}users/profile`, req)
 const getSpells = () => axios.get(`${baseURL}spells`)
+const spellCheck = (req: any) => axios.post(`${baseURL}spell-check`, req)
 
-export { getProfile, getWands, getAllUsers, selectWand, getSpells }
+export { getProfile, getWands, getAllUsers, selectWand, getSpells, spellCheck }

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
-type User = {
+export type UserType = {
   __v: number
   __id: string
   avatar: string
@@ -19,7 +19,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState: {
     token: '' as Token,
-    user: null as User,
+    user: null as UserType,
   },
   reducers: {
     login: (state, action) => {
