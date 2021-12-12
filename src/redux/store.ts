@@ -20,7 +20,7 @@ const rootReducer = (state: AppState | undefined, action: AnyAction) => {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['preferences'],
+  whitelist: ['preferences', 'auth'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
