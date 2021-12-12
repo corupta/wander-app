@@ -6,6 +6,7 @@ import { CommonParamList } from '../../types/Navigation'
 import useTheme from '../../contexts/theme'
 import { FONT_BOLD } from '../../constants/Theme'
 import { FontAwesome } from '@expo/vector-icons'
+import { Pressable } from 'react-native'
 
 const CommonStack = createStackNavigator<CommonParamList>()
 export default function CommonNavigator({ navigation }: StackScreenProps<CommonParamList>): JSX.Element {
@@ -22,7 +23,22 @@ export default function CommonNavigator({ navigation }: StackScreenProps<CommonP
       }}>
       <CommonStack.Screen options={{ title: 'Leader Board' }} name={Routes.LeaderBoard} component={LeaderBoard} />
       <CommonStack.Screen options={{ title: 'Magic List' }} name={Routes.MagicList} component={MagicList} />
-      <CommonStack.Screen options={{ title: 'Start Magic' }} name={Routes.StartMagic} component={StartMagic} />
+      <CommonStack.Screen
+        options={{
+          title: 'Start Magic',
+          headerRight: () => (
+            <Pressable
+              onPress={() => navigation.navigate(Routes.InformationModal)}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+              <FontAwesome name="info-circle" size={25} color={colors.text} style={{ marginRight: 15 }} />
+            </Pressable>
+          ),
+        }}
+        name={Routes.StartMagic}
+        component={StartMagic}
+      />
     </CommonStack.Navigator>
   )
 }
