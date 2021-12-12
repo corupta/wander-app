@@ -5,13 +5,28 @@ import { Routes } from '../../constants'
 import { NotFound } from '../../screens'
 import HomeNavigator from '../HomeNavigator'
 import { TabNavigator } from '../TabNavigator'
-import { authToken } from '../../redux/slices/authSlice'
-import { useSelector } from 'react-redux'
+import { authToken, user } from '../../redux/slices/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getProfile } from '../../api'
 
 const Stack = createStackNavigator<RootParamList>()
 
 function RootNavigator(): JSX.Element {
   const token = useSelector(authToken)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (token) {
+      getProfile()
+        .then((res) => {
+          dispatch(user(res.data))
+        })
+        .catch((err) => {
+          console.log('ERR', err)
+        })
+    }
+  }, [token])
+
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
