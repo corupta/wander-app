@@ -7,7 +7,10 @@
 * [TEST DASHBOARD DRAWING VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/dash-pointer.mp4)
 * [PLAY GAME HAND MOVEMENTS VIDEO](https://wanderapp-assets.s3.amazonaws.com/gorseller/gameplay.mp4)
 
-* # How it Works
+## NOTICE
+* We couldn't find any working library which could provide us with detecting phone position in 3d to make drawings that would fit our needs. Thus, we have created our OWN ORIGINAL SOLUTION by doing some hardcore R&D magic. 👻 Enjoy. You can fork this repo and use the underlying implementation from here to develop your own apps with point/move-your-phone-to-draw feature.
+
+# How it Works
 
 Our aim is to provide an experience where you master Harry Potter spells through practicing to draw them with your mobile phones. However, we did not take a simple approach, and instead made it possible through moving/rotating your phones, rather than drawing by hand.
 
