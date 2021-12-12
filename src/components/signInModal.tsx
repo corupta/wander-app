@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { FC } from 'react'
-import { View, Text, Modal, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { FC, useState } from 'react'
+import { View, Modal, SafeAreaView, Pressable, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { HPView } from '../theme/components'
+import { HPLoader } from '../theme/components'
 import useTheme from '../contexts/theme'
 import { WebView } from 'react-native-webview'
+import { SPACING } from '../theme/spacing'
 
 type IHPModal = {
   isVisible: boolean
@@ -16,6 +17,7 @@ type IHPModal = {
 const SignInModal: FC<IHPModal> = ({ isVisible, url, onDismiss, loginStatus, ...props }) => {
   const nav = useNavigation()
   const { colors } = useTheme()
+  const [spinner, setSpinner] = useState<boolean>(true)
 
   const handleWebViewNavigationStateChange = (props: any) => {
     let lastItem = (props.url || '').split('/')
@@ -30,20 +32,23 @@ const SignInModal: FC<IHPModal> = ({ isVisible, url, onDismiss, loginStatus, ...
   return (
     <Modal visible={isVisible} style={{ backgroundColor: 'red' }}>
       <SafeAreaView style={styles.container}>
-        <HPView variant="background">
-          <TouchableOpacity onPress={() => onDismiss()}>
+        <View style={styles.container}>
+          <Pressable style={styles.closeButton} onPress={() => onDismiss()}>
             <AntDesign name="closecircleo" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => loginStatus('TRUE')}>
-            <Text>LOGIN</Text>
-          </TouchableOpacity>
-          <Text>MODAL</Text>
+          </Pressable>
+
           <WebView
-            style={styles.container}
+            onLoad={() => setSpinner(false)}
+            style={styles.webView}
             source={{ uri: 'https://api.wanderapp.cf/oauth/github/' }}
             onNavigationStateChange={handleWebViewNavigationStateChange}
           />
-        </HPView>
+          {spinner && (
+            <View style={styles.spinner}>
+              <HPLoader size="large" />
+            </View>
+          )}
+        </View>
       </SafeAreaView>
     </Modal>
   )
@@ -52,6 +57,20 @@ const SignInModal: FC<IHPModal> = ({ isVisible, url, onDismiss, loginStatus, ...
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  webView: {
+    flex: 1,
+  },
+  spinner: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    zIndex: 2,
+    padding: SPACING.SMALL,
+    right: 0,
   },
 })
 
