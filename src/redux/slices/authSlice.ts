@@ -1,26 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
-type InitialState = {
-  token: string
-  user: {
-    __v: number
-    __id: string
-    avatar: string
-    createdAt: Date | number
-    email: null
-    githubId: string
-    level: number
-    name: string
-    updatedAt: Date | number
-  }
-}
+type User = {
+  __v: number
+  __id: string
+  avatar: string
+  createdAt: Date | number
+  email: any
+  githubId: string
+  level: number
+  name: string
+  updatedAt: Date | number
+} | null
+type Token = string
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    token: '',
-    user: {},
-  } as InitialState,
+    token: '' as Token,
+    user: null as User,
+  },
   reducers: {
     login: (state, action) => {
       state.token = action.payload

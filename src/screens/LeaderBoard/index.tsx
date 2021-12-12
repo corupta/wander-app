@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { HPLoader, HPText, HPView } from '../../theme/components'
-import { useSelector } from 'react-redux'
-import { userInformaiton } from '../../redux/slices/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { userInformaiton, user } from '../../redux/slices/authSlice'
+import { getProfile } from '../../api'
 
 const LeaderBoardScreen = () => {
-  const user = useSelector(userInformaiton)
+  const userInfo = useSelector(userInformaiton)
+  const dispatch = useDispatch()
 
-  if (!user) {
+  useEffect(() => {
+    if (!userInfo) {
+      getProfile()
+        .then((res) => {
+          dispatch(user(res.data))
+        })
+        .catch((err) => {
+          console.log('ERR', err)
+        })
+    }
+  }, [])
+  if (!userInfo) {
     return (
       <HPView variant="emptyScreen">
         <HPLoader size="large" />
