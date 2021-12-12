@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getProfile, getWands, selectWand } from '../../api'
 import useTheme from '../../contexts/theme'
 import { user, userInformaiton } from '../../redux/slices/authSlice'
-import { HPButton, HPDivider, HPLoader, HPText, HPView } from '../../theme/components'
+import { HPDivider, HPLoader, HPText, HPView } from '../../theme/components'
 import { BorderRadius } from '../../theme/layout'
 import { SPACING } from '../../theme/spacing'
 
@@ -67,15 +67,7 @@ const Item = ({ _id, title, image, requiredLevel, userLevel }: WandData & userLe
             </HPText>
           </View>
           {selectedWandId === _id && (
-            <View
-              style={{
-                backgroundColor: colors.error,
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingHorizontal: SPACING.TINY,
-                height: 30,
-                borderRadius: BorderRadius.Default,
-              }}>
+            <View style={[styles.selectButton, { backgroundColor: colors.error }]}>
               <HPText variant="info" color="white">
                 SELECTED
               </HPText>
@@ -84,14 +76,7 @@ const Item = ({ _id, title, image, requiredLevel, userLevel }: WandData & userLe
         </View>
       </Pressable>
       {userLevel < requiredLevel ? (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}>
+        <View style={styles.lockedRow}>
           <HPText
             variant="miscHelper"
             color="error"
@@ -142,6 +127,7 @@ const WandScreen = () => {
   return (
     <FlatList
       contentContainerStyle={[styles.container, { backgroundColor: colors.background }]}
+      style={{ backgroundColor: colors.background }}
       data={data}
       ItemSeparatorComponent={() => <HPDivider />}
       renderItem={renderItem}
@@ -166,6 +152,20 @@ const styles = StyleSheet.create({
     paddingLeft: SPACING.SMALLER,
     flexShrink: 1,
     justifyContent: 'center',
+  },
+  selectButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.TINY,
+    height: 30,
+    borderRadius: BorderRadius.Default,
+  },
+  lockedRow: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 })
 

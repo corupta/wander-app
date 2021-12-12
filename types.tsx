@@ -26,7 +26,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 >
 
 export type RootTabParamList = {
-  LeaderBoard: undefined
+  CommonNavigator: undefined
   Profile: undefined
   ListOfWands: undefined
 }

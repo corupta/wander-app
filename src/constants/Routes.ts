@@ -11,9 +11,13 @@ export enum Routes {
   Welcome = 'Welcome',
 
   //TABNAVIGATOR//
-  LeaderBoard = 'LeaderBoard',
+  CommonNavigator = 'CommonNavigator',
   Profile = 'Profile',
   ListOfWands = 'ListOfWands',
+
+  //COMMON//
+  LeaderBoard = 'LeaderBoard',
+  StartMagic = 'StartMagic',
 }
 
 export default Routes

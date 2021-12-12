@@ -30,8 +30,8 @@ const SignInModal: FC<IHPModal> = ({ isVisible, url, onDismiss, loginStatus, ...
   }
 
   return (
-    <Modal visible={isVisible} style={{ backgroundColor: 'red' }}>
-      <SafeAreaView style={styles.container}>
+    <Modal visible={isVisible}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.container}>
           <Pressable style={styles.closeButton} onPress={() => onDismiss()}>
             <AntDesign name="closecircleo" size={24} color={colors.text} />
@@ -44,8 +44,8 @@ const SignInModal: FC<IHPModal> = ({ isVisible, url, onDismiss, loginStatus, ...
             onNavigationStateChange={handleWebViewNavigationStateChange}
           />
           {spinner && (
-            <View style={styles.spinner}>
-              <HPLoader size="large" />
+            <View style={[styles.spinner, { backgroundColor: colors.background }]}>
+              <HPLoader size="large" color="text" />
             </View>
           )}
         </View>

@@ -12,3 +12,8 @@ export type HomeParamList = {
 export type AuthParamList = {
   [Routes.Welcome]: undefined
 }
+
+export type CommonParamList = {
+  [Routes.LeaderBoard]: undefined
+  [Routes.StartMagic]: undefined
+}
