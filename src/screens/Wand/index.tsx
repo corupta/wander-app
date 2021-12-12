@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { getWands } from '../../api'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProfile, getWands, selectWand } from '../../api'
 import useTheme from '../../contexts/theme'
-import { userInformaiton } from '../../redux/slices/authSlice'
-import { HPDivider, HPLoader, HPText, HPView } from '../../theme/components'
+import { user, userInformaiton } from '../../redux/slices/authSlice'
+import { HPButton, HPDivider, HPLoader, HPText, HPView } from '../../theme/components'
+import { BorderRadius } from '../../theme/layout'
 import { SPACING } from '../../theme/spacing'
 
 type userLevel = { userLevel: number }
@@ -13,29 +14,73 @@ type ItemProps = {
 }
 
 type WandData = {
-  __id?: string
+  _id?: string
   title: string
   image: string
   requiredLevel: number
 }
-const Item = ({ title, image, requiredLevel, userLevel }: WandData & userLevel) => {
+export type WandId = { wandId: string }
+const Item = ({ _id, title, image, requiredLevel, userLevel }: WandData & userLevel) => {
+  const { colors } = useTheme()
+  const dispatch = useDispatch()
+  const selectedWandId: any = useSelector(userInformaiton)?.wandId
+  const chooseWand = () => {
+    const req = {
+      wandId: _id,
+    } as WandId
+    selectWand(req)
+      .then((res) => {
+        if (res) {
+          reFetchProfile()
+          return
+        }
+      })
+      .catch((err) => console.log('ERR', err.response.data))
+  }
+
+  const reFetchProfile = () => {
+    getProfile()
+      .then((res) => {
+        dispatch(user(res.data))
+      })
+      .catch((err) => {
+        console.log('ERR', err)
+      })
+  }
+
+  const isDisabled = userLevel < requiredLevel || selectedWandId === _id
+
   return (
     <>
-      <Pressable
-        disabled={userLevel < requiredLevel}
-        style={[styles.itemContainer]}
-        onPress={() => console.log('TODO SELECT WAND')}>
+      <Pressable disabled={isDisabled} style={[styles.itemContainer]} onPress={chooseWand}>
         <Image source={{ uri: image }} style={styles.wandImage} resizeMode="contain" />
-        <View style={styles.infoRow}>
-          <HPText variant="header" color="text">
-            {title}
-          </HPText>
-          <HPText variant="subheader" color="text">
-            Required Level:{' '}
-            <HPText variant="subheader" color="error">
-              {requiredLevel}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, alignItems: 'center' }}>
+          <View style={styles.infoRow}>
+            <HPText variant="header" color="text">
+              {title}{' '}
             </HPText>
-          </HPText>
+            <HPText variant="subheader" color="text">
+              Required Level:{' '}
+              <HPText variant="subheader" color="error">
+                {requiredLevel}
+              </HPText>
+            </HPText>
+          </View>
+          {selectedWandId === _id && (
+            <View
+              style={{
+                backgroundColor: colors.error,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: SPACING.TINY,
+                height: 30,
+                borderRadius: BorderRadius.Default,
+              }}>
+              <HPText variant="info" color="white">
+                SELECTED
+              </HPText>
+            </View>
+          )}
         </View>
       </Pressable>
       {userLevel < requiredLevel ? (
@@ -76,7 +121,15 @@ const WandScreen = () => {
   }, [])
 
   const renderItem = ({ item }: ItemProps) => {
-    return <Item title={item.title} image={item.image} requiredLevel={item.requiredLevel} userLevel={userLevel} />
+    return (
+      <Item
+        _id={item._id}
+        title={item.title}
+        image={item.image}
+        requiredLevel={item.requiredLevel}
+        userLevel={userLevel}
+      />
+    )
   }
 
   if (!data) {
@@ -92,7 +145,7 @@ const WandScreen = () => {
       data={data}
       ItemSeparatorComponent={() => <HPDivider />}
       renderItem={renderItem}
-      keyExtractor={(item, index) => `${item.__id}-${index}`}
+      keyExtractor={(item, index) => `${item._id}-${index}`}
     />
   )
 }
