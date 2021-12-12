@@ -3,9 +3,11 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import preferencesReducer from './slices/preferencesSlice'
+import authReducer from './slices/authSlice'
 
 const appReducer = combineReducers({
   preferences: preferencesReducer,
+  auth: authReducer,
 })
 
 const rootReducer = (state: AppState | undefined, action: AnyAction) => {
