@@ -1,7 +1,21 @@
 import axios from 'axios'
+import { Keyboard } from 'react-native'
+import { store } from '../redux/store'
 
-const baseURL = 'https://google.com'
+const baseURL = 'https://api.wanderapp.cf/'
 
-export default axios.create({
-  baseURL,
-})
+axios.interceptors.request.use(
+  async (config: any) => {
+    if (config.method !== 'GET') Keyboard.dismiss()
+    const token = store.getState().auth.token
+
+    if (token) config.headers.Authorization = 'Bearer ' + token
+    else config.headers.Authorization = ''
+    return config
+  },
+  (error) => Promise.reject(error),
+)
+
+const getProfile = () => axios.get(`${baseURL}users/profile`)
+
+export { getProfile }

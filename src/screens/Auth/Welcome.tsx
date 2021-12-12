@@ -1,17 +1,14 @@
-import React, { FC } from 'react'
-import { Text, View, StyleSheet, Alert } from 'react-native'
+import React, { FC, useState } from 'react'
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Routes } from '../../constants'
 import { AuthParamList, HomeParamList } from '../../types/Navigation'
-import useTheme from '../../contexts/theme'
-import { useDispatch } from 'react-redux'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { changeTheme } from '../../redux/slices/preferencesSlice'
-import { Theme } from '../../constants/Theme'
 import { HPText, HPButton, HPDivider } from '../../theme/components'
 import { SPACING } from '../../theme/spacing'
 import HPView from '../../theme/components/HPView'
+import SignInModal from '../../components/signInModal'
+import { useDispatch } from 'react-redux'
+import { login } from '../../redux/slices/authSlice'
 
 type WelcomeScreenRouteProp = RouteProp<AuthParamList, Routes.Welcome>
 
@@ -25,45 +22,41 @@ type StackScreenProps = {
 }
 
 const WelcomeScreen: FC<StackScreenProps> = ({ navigation }) => {
-  const { colors, selectedTheme } = useTheme()
+  const [signInModal, setSignInModal] = useState(false)
   const dispatch = useDispatch()
+
+  const loginStatus = (status: string) => {
+    setSignInModal(false)
+    dispatch(login(status))
+  }
 
   return (
     <HPView variant="background">
       <HPText variant="header" color="text" margin={{ marginVertical: SPACING.LARGE }} alignSelf="center">
         Welcome Screen
       </HPText>
-
-      <HPButton large variant="outlined" size="fullWidth" title="LOGIN" onPress={() => console.log('HARRY POTTER')} />
+      <HPButton
+        large
+        variant="outlined"
+        size="fullWidth"
+        title="LOGIN WITH GITHUB"
+        onPress={() => setSignInModal(true)}
+      />
+      <HPDivider />
       <HPText variant="subheader" color="text" margin={{ marginVertical: SPACING.LARGE }}>
         Harry Potter
       </HPText>
-      <HPDivider />
-      {[Theme.Light, Theme.Dark, null].map((theme) => (
-        <TouchableOpacity
-          key={theme}
-          style={[styles.button, { backgroundColor: colors.primary }]}
-          onPress={() => dispatch(changeTheme(theme))}>
-          <Text style={{ color: colors.text }}>
-            {theme ?? 'system default'}
-            {selectedTheme === theme && ' active'}
-          </Text>
-        </TouchableOpacity>
-      ))}
+
+      {signInModal && (
+        <SignInModal
+          isVisible={signInModal}
+          url="https://api.wanderapp.cf/oauth/github/"
+          onDismiss={() => setSignInModal(false)}
+          loginStatus={loginStatus}
+        />
+      )}
     </HPView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: SPACING.MASSIVE,
-  },
-  button: {
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginTop: 20,
-  },
-})
 
 export default WelcomeScreen
