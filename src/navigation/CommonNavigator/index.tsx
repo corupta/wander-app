@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 import { Routes } from '../../constants'
-import { LeaderBoard, StartMagic } from '../../screens'
+import { LeaderBoard, MagicList, StartMagic } from '../../screens'
 import { CommonParamList } from '../../types/Navigation'
 import useTheme from '../../contexts/theme'
 import { FONT_BOLD } from '../../constants/Theme'
@@ -21,6 +21,7 @@ export default function CommonNavigator({ navigation }: StackScreenProps<CommonP
         headerBackTitleVisible: false,
       }}>
       <CommonStack.Screen options={{ title: 'Leader Board' }} name={Routes.LeaderBoard} component={LeaderBoard} />
+      <CommonStack.Screen options={{ title: 'Magic List' }} name={Routes.MagicList} component={MagicList} />
       <CommonStack.Screen options={{ title: 'Start Magic' }} name={Routes.StartMagic} component={StartMagic} />
     </CommonStack.Navigator>
   )

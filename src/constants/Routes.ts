@@ -17,6 +17,7 @@ export enum Routes {
 
   //COMMON//
   LeaderBoard = 'LeaderBoard',
+  MagicList = 'MagicList',
   StartMagic = 'StartMagic',
 }
 

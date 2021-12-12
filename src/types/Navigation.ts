@@ -15,5 +15,6 @@ export type AuthParamList = {
 
 export type CommonParamList = {
   [Routes.LeaderBoard]: undefined
+  [Routes.MagicList]: undefined
   [Routes.StartMagic]: undefined
 }
