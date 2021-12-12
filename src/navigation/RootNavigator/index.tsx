@@ -2,7 +2,7 @@ import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { RootParamList } from '../../types/Navigation'
 import { Routes } from '../../constants'
-import { NotFound } from '../../screens'
+import { InformationModal, NotFound } from '../../screens'
 import HomeNavigator from '../HomeNavigator'
 import { TabNavigator } from '../TabNavigator'
 import { authToken, user } from '../../redux/slices/authSlice'
@@ -37,6 +37,9 @@ function RootNavigator(): JSX.Element {
         <Stack.Screen name={Routes.Home} component={HomeNavigator} />
       )}
 
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen name={Routes.InformationModal} component={InformationModal} />
+      </Stack.Group>
       <Stack.Screen name={Routes.NotFound} component={NotFound} options={{ title: 'Ooops!' }} />
     </Stack.Navigator>
   )

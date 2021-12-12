@@ -3,6 +3,7 @@ export enum Routes {
   Home = 'Home',
   NotFound = 'NotFound',
   TabNavigator = 'TabNavigator',
+  InformationModal = 'InformationModal',
 
   // HOME //
   Auth = 'Auth',

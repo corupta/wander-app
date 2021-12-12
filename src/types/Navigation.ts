@@ -4,6 +4,7 @@ export type RootParamList = {
   [Routes.Home]: undefined
   [Routes.NotFound]: undefined
   [Routes.TabNavigator]: undefined
+  [Routes.InformationModal]: undefined
 }
 export type HomeParamList = {
   [Routes.Auth]: undefined
@@ -22,4 +23,5 @@ export type CommonParamList = {
     description: string
     image: string
   }
+  [Routes.InformationModal]: undefined
 }
