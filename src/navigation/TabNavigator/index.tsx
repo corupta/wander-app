@@ -8,6 +8,7 @@ import { RootTabParamList, RootTabScreenProps } from '../../../types'
 import { FONT_BOLD, FONT_REGULAR } from '../../constants/Theme'
 import { SPACING } from '../../theme/spacing'
 import { IconSize } from '../../theme/layout'
+import CommonNavigator from '../CommonNavigator'
 
 const Tab = createBottomTabNavigator<RootTabParamList>()
 
@@ -25,9 +26,10 @@ export function TabNavigator() {
         headerTitleStyle: { color: colors.text, fontSize: 20, fontFamily: FONT_BOLD },
       }}>
       <Tab.Screen
-        name={Routes.LeaderBoard}
-        component={LeaderBoard}
-        options={({ navigation }: RootTabScreenProps<'LeaderBoard'>) => ({
+        name="CommonNavigator"
+        component={CommonNavigator}
+        options={({ navigation }: RootTabScreenProps<'CommonNavigator'>) => ({
+          headerShown: false,
           title: 'Leader Board',
           tabBarIcon: ({ focused }) => <TabBarIcon name="trophy" color={focused ? colors.primary : colors.overlay} />,
         })}

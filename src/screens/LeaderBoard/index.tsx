@@ -56,7 +56,7 @@ const Item = ({ name, avatar, level, index }: { name: string; avatar: string; le
   )
 }
 
-const LeaderBoardScreen = () => {
+const LeaderBoardScreen = ({ navigation }: any) => {
   const [allUsers, setAllUsers] = useState()
   const userInfo = useSelector(userInformaiton)
   const dispatch = useDispatch()
@@ -105,8 +105,11 @@ const LeaderBoardScreen = () => {
               </View>
             </View>
             <Pressable
-              style={[styles.startMagic, { backgroundColor: colors.primary }]}
-              onPress={() => console.log('lets start the magic')}>
+              style={({ pressed }) => [
+                styles.startMagic,
+                { opacity: pressed ? 0.6 : 1.0, backgroundColor: colors.primary },
+              ]}
+              onPress={() => navigation.navigate('StartMagic')}>
               <HPText variant="subheader" alignSelf="center" color="white">
                 LET'S START THE MAGIC!
               </HPText>
