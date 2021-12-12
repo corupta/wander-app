@@ -11,6 +11,7 @@ type User = {
   level: number
   name: string
   updatedAt: Date | number
+  wandId?: string
 } | null
 type Token = string
 

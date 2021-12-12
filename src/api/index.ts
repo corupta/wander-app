@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Keyboard } from 'react-native'
 import { store } from '../redux/store'
+import { WandId } from '../screens/Wand'
 
 const baseURL = 'https://api.wanderapp.cf/'
 
@@ -19,5 +20,6 @@ axios.interceptors.request.use(
 const getProfile = () => axios.get(`${baseURL}users/profile`)
 const getWands = () => axios.get(`${baseURL}wands`)
 const getAllUsers = () => axios.get(`${baseURL}users`)
+const selectWand = (req: WandId) => axios.put(`${baseURL}users/profile`, req)
 
-export { getProfile, getWands, getAllUsers }
+export { getProfile, getWands, getAllUsers, selectWand }
