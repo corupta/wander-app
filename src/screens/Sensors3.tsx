@@ -6,10 +6,14 @@ import axios from 'axios';
 import flat from 'flat';
 import PQueue from 'p-queue';
 
+UPDATE_INTERVAL = 16;
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#ddff88',
-        flex: 1
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     sucText: {
         color: '#008800'
@@ -29,7 +33,7 @@ const accelarationToDegrees = (accel) => {
 
 const calculateNextState = (prevState = {}, interval, data) => {
     const nextState = {};
-    Object.entries(data).forEach((key, raw) => {
+    Object.entries(data).forEach(([key, raw]) => {
         if (typeof raw === 'object') {
             nextState[key] = calculateNextState((prevState || {})[key], interval, raw);
             if (key.startsWith('acceleration')) {
@@ -59,15 +63,17 @@ const calculateNextState = (prevState = {}, interval, data) => {
 }
 
 const dweetState = (state) => {
-    flatState = flat(state);
-    return axios.post('https://dweet.io/dweet/for/educated-giants/', flatState);
+    flatState = flat(state, { delimiter: '_'});
+    return async () => {
+        return axios.post('https://dweet.io/dweet/quietly/for/educated-giants', flatState);
+    }
 }
 
 class Sensors extends React.PureComponent {
     state = {
         avail: undefined
     }
-    constructor() {
+    componentDidMount() {
         DeviceMotion.isAvailableAsync().then((avail) => {
             if (avail) {
                 DeviceMotion.addListener(this.deviceMotionListener);
@@ -76,10 +82,13 @@ class Sensors extends React.PureComponent {
         })
         this.queue = new PQueue({ concurrency: 1 });
         this.dataState = {};
-        DeviceMotion.setUpdateInterval(16);
+        DeviceMotion.setUpdateInterval(UPDATE_INTERVAL);
     }
-    deviceMotionListener(rawData) {
+    deviceMotionListener = (rawData) => {
         let { interval, orientation, ...data } = rawData;
+        if (!interval) {
+            interval = UPDATE_INTERVAL;
+        }
         interval /= 1000; // ms to s
         this.dataState = calculateNextState(this.dataState, interval, data);
         this.queue.add(dweetState(this.dataState));
