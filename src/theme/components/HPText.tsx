@@ -36,7 +36,6 @@ interface IHPTextProps extends IHPBaseComponentProps {
   onLayout?: (e: LayoutChangeEvent) => void
   textDecorationLine?: TextStyle['textDecorationLine']
   variant: IHPTextVariant
-  // TODO: Ask if we need these 4 props
   opacity?: number
   position?: 'relative' | 'absolute'
   textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify'

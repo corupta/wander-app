@@ -8,6 +8,7 @@ import useTheme from '../../contexts/theme'
 import { AvatarSize, BorderRadius, IconSize } from '../../theme/layout'
 import { spacing, SPACING } from '../../theme/spacing'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { Routes } from '../../constants'
 
 type ItemProps = {
   __v?: number
@@ -109,7 +110,7 @@ const LeaderBoardScreen = ({ navigation }: any) => {
                 styles.startMagic,
                 { opacity: pressed ? 0.6 : 1.0, backgroundColor: colors.primary },
               ]}
-              onPress={() => navigation.navigate('StartMagic')}>
+              onPress={() => navigation.navigate(Routes.MagicList)}>
               <HPText variant="subheader" alignSelf="center" color="white">
                 LET'S START THE MAGIC!
               </HPText>
